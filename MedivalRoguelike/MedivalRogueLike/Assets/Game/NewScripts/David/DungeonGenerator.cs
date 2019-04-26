@@ -150,10 +150,12 @@ public class DungeonGenerator : MonoBehaviour
 
 			MakeCorridors();
 
+            int minCropX = CropX();
+            int minCropY = CropY();
             foreach (Room room in m_Rooms)
             {
-                room.m_X = CropX();
-                room.m_Y = CropY();
+                room.m_X = minCropX;
+                room.m_Y = minCropY;
             }
 
             SetFinalMapSize();
@@ -217,7 +219,7 @@ public class DungeonGenerator : MonoBehaviour
 			room.m_W = Random.Range(m_MinSize, m_MaxSize);
 			if (room.m_W % 2 == 0) room.m_W += 1;
 			room.m_H = Random.Range(m_MinSize, m_MaxSize);
-			if (room.m_H % 2 == 0) room.m_W += 1;
+			if (room.m_H % 2 == 0) room.m_H += 1;
 			return room;
 		}
 		// defines the size of every other room.
@@ -457,7 +459,7 @@ public class DungeonGenerator : MonoBehaviour
 					for (int y = 0; y < m_MapSize - 1; y++)
 					{
 						m_Map[row, y] = m_Map[x, y];
-						//m_Map[x, y] = new MapTile();
+						m_Map[x, y] = new MapTile();
 					}
 					row += 1;
 				}
@@ -489,7 +491,7 @@ public class DungeonGenerator : MonoBehaviour
 					for (int x = 0; x < m_MapSize - 1; x++)
 					{
 						m_Map[x, row] = m_Map[x, y];
-						//m_Map[x, y] = new MapTile();
+						m_Map[x, y] = new MapTile();
 					}
 					row += 1;
 				}
@@ -501,23 +503,17 @@ public class DungeonGenerator : MonoBehaviour
 		{
             
             int finalMapSizeY = 0;
-            //string output = string.Empty;
             for (int y = 0; y < m_MapSize - 1; y++)
             {
                 for (int x = 0; x < m_MapSize - 1; x++)
                 {
-                    //output += x + " " + y + " is " + m_Map[x, y].m_Type + "\n";
-                    //Debug.Log(m_Map[x, y].m_Type);
                     if (m_Map[x, y].m_Type != 0)
                     {
-                        //Debug.Log("IT FUCKING DOES IT");
                         finalMapSizeY += 1;
                         break;
                     }
                 }
             }
-            //Debug.Log("setfinalmapsize done");
-            //Debug.Log(output);
 
             int finalMapSizeX = 0;
             for (int x = 0; x < m_MapSize - 1; x++)
@@ -543,8 +539,6 @@ public class DungeonGenerator : MonoBehaviour
                     newMap[x, y] = m_Map[x, y];
                 }
             }
-            //Debug.Log(m_MapSizeX + "mapsizeXpre");
-            //Debug.Log(m_MapSizeY + "mapsizeYpre");
             Debug.Log(m_Map.Length + "mapsizepre");
             m_Map = newMap;
             m_MapSizeX = finalMapSizeX;
