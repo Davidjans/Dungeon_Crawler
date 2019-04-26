@@ -16,7 +16,6 @@ public class DungeonizerEditor : Editor {
 			//add everthing the button would do.
 			realscript.ClearOldDungeon(true);
 			realscript.Generate();
-			
 		}
 	}
 }

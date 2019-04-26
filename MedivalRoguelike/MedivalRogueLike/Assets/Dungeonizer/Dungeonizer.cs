@@ -16,7 +16,7 @@ public class RoomOriginal {
 	public int room_id = 0;
 }
 
-public class SpawnList {
+public class OriginalSpawnList {
 	public int x;
 	public int y;
 	public bool byWall;
@@ -30,11 +30,11 @@ public class SpawnList {
 }
 
 [System.Serializable]
-public class SpawnOption {
+public class OriginalSpawnOption {
 	public int minSpawnCount;
 	public int maxSpawnCount;
 	public bool spawnByWall;
-    public bool spawmInTheMiddle;
+    public bool spawnInTheMiddle;
     public bool spawnRotated;
     //public bool byCorridor;
     public float heightFix = 0;
@@ -45,7 +45,7 @@ public class SpawnOption {
 }
 
 [System.Serializable]
-public class CustomRoom {
+public class OriginalCustomRoom {
 	[Tooltip("make sure room id isnt bigger than your room count")]
 	public int roomId = 1;
 	public GameObject floorPrefab;
@@ -74,20 +74,20 @@ public class Dungeonizer : MonoBehaviour {
 
     public int maximumRoomCount = 10;
 
-    [Tooltip("Maximum gap between rooms. Also affects corridor lengths ")]
+	[Tooltip("Maximum gap between rooms. Also affects corridor lengths ")]
     public int roomMargin = 3;
     [Tooltip("If Checked: makes dungeon reset on every time level loads.")]
     public bool generate_on_load = true;
 	public int minRoomSize = 5;
 	public int maxRoomSize = 10;
 	public float tileScaling = 1f;
-	public List<SpawnOption> spawnOptions = new List<SpawnOption>();
-	public List<CustomRoom> customRooms = new List<CustomRoom> ();
+	public List<OriginalSpawnOption> spawnOptions = new List<OriginalSpawnOption>();
+	public List<OriginalCustomRoom> customRooms = new List<OriginalCustomRoom> ();
 	public bool makeIt3d = false;
 
-    //public NavMeshSurface surface;
+	//public NavMeshSurface surface;
 
-    class Dungeon {
+	class Dungeon {
 		public /*static*/ int map_size;
 		public /*static*/ int map_size_x;
 		public /*static*/ int map_size_y;
@@ -252,22 +252,29 @@ public class Dungeonizer : MonoBehaviour {
 					pointA.y = roomA.y + (int)Mathf.Floor (roomA.h / 2);
 					pointB.y = roomB.y + (int)Mathf.Floor (roomB.h / 2);
 
-					if (Mathf.Abs (pointA.x - pointB.x) > Mathf.Abs (pointA.y - pointB.y)) {
+					if (Mathf.Abs(pointA.x - pointB.x) > Mathf.Abs(pointA.y - pointB.y))
+					{
 						//yatay
-						if (roomA.h > roomB.h) {
+						if (roomA.h > roomB.h)
+						{
 							pointA.y = pointB.y;
-
-						} else {
-							pointB.y = pointA.y;
-
 						}
-					} else {
+						else
+						{
+							pointB.y = pointA.y;
+						}
+					}
+					else
+					{
 						//dikey
-						if (roomA.w > roomB.w) {
+						if (roomA.w > roomB.w)
+						{
 							pointA.x = pointB.x;
-						} else {
+						}
+						else
+						{
 							pointB.x = pointA.x;
-						}					
+						}
 					}
 
 					while ((pointB.x != pointA.x) || (pointB.y != pointA.y)) {
@@ -353,9 +360,12 @@ public class Dungeonizer : MonoBehaviour {
 
 			//test map size
 			int final_map_size_y = 0;
-			for (int y = 0; y < map_size -1; y++) {
-				for (int x = 0; x < map_size -1; x++) {
-					if (map[x,y].type != 0){
+			for (int y = 0; y < map_size - 1; y++)
+			{
+				for (int x = 0; x < map_size - 1; x++)
+				{
+					if (map[x, y].type != 0)
+					{
 						final_map_size_y += 1;
 						break;
 					}
@@ -363,9 +373,12 @@ public class Dungeonizer : MonoBehaviour {
 			}
 
 			int final_map_size_x = 0;
-			for (int x = 0; x < map_size -1; x++) {
-				for (int y = 0; y < map_size -1; y++) {
-					if (map[x,y].type != 0){
+			for (int x = 0; x < map_size - 1; x++)
+			{
+				for (int y = 0; y < map_size - 1; y++)
+				{
+					if (map[x, y].type != 0)
+					{
 						final_map_size_x += 1;
 						break;
 					}
@@ -376,9 +389,11 @@ public class Dungeonizer : MonoBehaviour {
 			final_map_size_y += 5;
 
 			MapTileOriginal[,] new_map = new MapTileOriginal[final_map_size_x + 1, final_map_size_y + 1];
-			for (int x= 0; x < final_map_size_x; x++) {
-				for(int y=0;y < final_map_size_y; y++){
-					new_map[x,y] = map[x,y];
+			for (int x = 0; x < final_map_size_x; x++)
+			{
+				for (int y = 0; y < final_map_size_y; y++)
+				{
+					new_map[x, y] = map[x, y];
 				}
 			}
 			map = new_map;
@@ -496,15 +511,15 @@ public class Dungeonizer : MonoBehaviour {
 		}
 
 		private bool DoesCollide (RoomOriginal room, int ignore) {
-			int random_blankliness = 0;
+			//int random_blankliness = 0;
 
 			for (int i = 0; i < rooms.Count; i++) {
 				//if (i == ignore) continue;
 				var check = rooms[i];
-				if (!((room.x + room.w + random_blankliness < check.x) ||
-                     (room.x > check.x + check.w + random_blankliness) || 
-                     (room.y + room.h + random_blankliness < check.y) || 
-                     (room.y > check.y + check.h + random_blankliness)))
+				if (!((room.x + room.w /*+ random_blankliness*/ < check.x) ||
+                     (room.x > check.x + check.w /*+ random_blankliness*/) || 
+                     (room.y + room.h /*+ random_blankliness*/ < check.y) || 
+                     (room.y > check.y + check.h /*+ random_blankliness*/)))
                     return true;
 			}
 			
@@ -512,22 +527,19 @@ public class Dungeonizer : MonoBehaviour {
 		}
  
 
-		private float lineDistance( RoomOriginal point1, RoomOriginal point2 )
-		{
-			var xs = 0;
-			var ys = 0;
+		//private float lineDistance( RoomOriginal point1, RoomOriginal point2 )
+		//{
+		//	var xs = 0;
+		//	var ys = 0;
 			
-			xs = point2.x - point1.x;
-			xs = xs * xs;
+		//	xs = point2.x - point1.x;
+		//	xs = xs * xs;
 			
-			ys = point2.y - point1.y;
-			ys = ys * ys;
+		//	ys = point2.y - point1.y;
+		//	ys = ys * ys;
 			
-			return Mathf.Sqrt( xs + ys );
-		}
-
-
-
+		//	return Mathf.Sqrt( xs + ys );
+		//}
 	}
 
 	public void ClearOldDungeon(bool immediate = false)
@@ -565,9 +577,13 @@ public class Dungeonizer : MonoBehaviour {
 				GameObject created_tile;
 				Vector3 tile_location;
 				if (!makeIt3d) {
-					tile_location = new Vector3 (x * tileScaling, y * tileScaling, 0);
+					tile_location = new Vector3 (x * tileScaling, y  * tileScaling, 0);
 				} else {
 					tile_location = new Vector3 (x * tileScaling, 0, y * tileScaling);
+					if (tile == 1 || tile == 3)
+					{
+						tile_location.y = -0.7f;
+					}
 				}
 
 				created_tile = null;
@@ -575,7 +591,7 @@ public class Dungeonizer : MonoBehaviour {
 					GameObject floorPrefabToUse = floorPrefab;
 					RoomOriginal room = dungeon.map[x,y].room;
 					if(room != null){
-						foreach(CustomRoom customroom in customRooms){
+						foreach(OriginalCustomRoom customroom in customRooms){
 							if(customroom.roomId == room.room_id){
 								floorPrefabToUse = customroom.floorPrefab;
 								break;
@@ -590,16 +606,17 @@ public class Dungeonizer : MonoBehaviour {
 					GameObject wallPrefabToUse = wallPrefab;
 					RoomOriginal room = dungeon.map[x,y].room;
 					if(room != null){
-						foreach(CustomRoom customroom in customRooms){
+						foreach(OriginalCustomRoom customroom in customRooms){
 							if(customroom.roomId == room.room_id){
 								wallPrefabToUse = customroom.wallPrefab;
 								break;
 							}
 						}
 					}
-					////////////////////////////////////////////////// edited the spawn location original is just tile_location
-					created_tile = GameObject.Instantiate (wallPrefabToUse, new Vector3(tile_location.x, tile_location.y + 0.6f, tile_location.z), Quaternion.identity) as GameObject;
-					if(!makeIt3d){
+
+					created_tile = GameObject.Instantiate(wallPrefabToUse, new Vector3(tile_location.x, tile_location.y, tile_location.z), Quaternion.identity) as GameObject;
+
+					if (!makeIt3d){
 						created_tile.transform.Rotate(Vector3.forward  * (-90 * (tile -4)));
 					}
 					else{
@@ -628,7 +645,7 @@ public class Dungeonizer : MonoBehaviour {
 					GameObject cornerPrefabToUse = cornerPrefab;
 					RoomOriginal room = dungeon.map[x,y]. room;
 					if(room != null){
-						foreach(CustomRoom customroom in customRooms){
+						foreach(OriginalCustomRoom customroom in customRooms){
 							if(customroom.roomId == room.room_id){
 								cornerPrefabToUse = customroom.cornerPrefab;
 								break;
@@ -636,9 +653,8 @@ public class Dungeonizer : MonoBehaviour {
 						}
 					}
 
-					////////////////////////////////////////////////// edited the spawn location original is just tile_location
 					if (cornerPrefabToUse){ //there was a bug in this line. A good man helped for fix.
-						created_tile = GameObject.Instantiate (cornerPrefabToUse, new Vector3(tile_location.x, tile_location.y + 0.6f, tile_location.z), Quaternion.identity) as GameObject;
+						created_tile = GameObject.Instantiate (cornerPrefabToUse, new Vector3(tile_location.x, tile_location.y, tile_location.z), Quaternion.identity) as GameObject;
 						if(cornerRotation){
 							if(!makeIt3d){
 								created_tile.transform.Rotate(Vector3.forward  * (-90 * (tile -4)));
@@ -648,8 +664,8 @@ public class Dungeonizer : MonoBehaviour {
 							}
 						}
 					}
-					else{////////////////////////////////////////////////// edited the spawn location original is just tile_location
-						created_tile = GameObject.Instantiate (wallPrefab, new Vector3(tile_location.x, tile_location.y + 0.6f, tile_location.z), Quaternion.identity) as GameObject;
+					else{
+						created_tile = GameObject.Instantiate (wallPrefab, new Vector3(tile_location.x, tile_location.y, tile_location.z), Quaternion.identity) as GameObject;
 					}
 				}
 				
@@ -675,14 +691,14 @@ public class Dungeonizer : MonoBehaviour {
 		start_point.transform.parent = transform;
 		
 		//Spawn Objects;
-		List<SpawnList> spawnedObjectLocations = new List<SpawnList> ();
+		List<OriginalSpawnList> spawnedObjectLocations = new List<OriginalSpawnList> ();
 
 		//OTHERS
 		for (int x = 0; x < dungeon.map_size_x; x++) {
 			for (int y = 0; y < dungeon.map_size_y; y++) {
 				if (dungeon.map [x, y].type == 1 &&
 				    	((dungeon.startRoom != dungeon.map [x, y].room && dungeon.goalRoom != dungeon.map [x, y].room) || maximumRoomCount <= 3)) {
-					var location = new SpawnList ();
+					var location = new OriginalSpawnList ();
 
 					location.x = x;
 					location.y = y;
@@ -722,7 +738,7 @@ public class Dungeonizer : MonoBehaviour {
                     spawnedObjectLocations.Add (location);
 				}
 				else if (dungeon.map [x, y].type == 3) {
-					var location = new SpawnList ();
+					var location = new OriginalSpawnList ();
 					location.x = x;
 					location.y = y;	
 
@@ -759,7 +775,7 @@ public class Dungeonizer : MonoBehaviour {
 		}
 		
 		for (int i = 0; i < spawnedObjectLocations.Count; i++) {
-			SpawnList temp = spawnedObjectLocations [i];
+			OriginalSpawnList temp = spawnedObjectLocations [i];
 			int randomIndex = Random.Range (i, spawnedObjectLocations.Count);
 			spawnedObjectLocations [i] = spawnedObjectLocations [randomIndex];
 			spawnedObjectLocations [randomIndex] = temp;
@@ -777,12 +793,12 @@ public class Dungeonizer : MonoBehaviour {
 			for (int i = 0; i < spawnedObjectLocations.Count; i++) {
 				if (spawnedObjectLocations[i].asDoor > 0){
 					GameObject newObject;
-					SpawnList spawnLocation = spawnedObjectLocations[i];
+					OriginalSpawnList spawnLocation = spawnedObjectLocations[i];
 
 					GameObject doorPrefabToUse = doorPrefab;
 					RoomOriginal room = spawnLocation.room;
 					if(room != null){
-						foreach(CustomRoom customroom in customRooms){
+						foreach(OriginalCustomRoom customroom in customRooms){
 							if(customroom.roomId == room.room_id){
 								doorPrefabToUse = customroom.doorPrefab;
 								break;
@@ -814,7 +830,7 @@ public class Dungeonizer : MonoBehaviour {
 
 
         //OTHERS
-        foreach (SpawnOption objectToSpawn in spawnOptions){
+        foreach (OriginalSpawnOption objectToSpawn in spawnOptions){
 			objectCountToSpawn = Random.Range(objectToSpawn.minSpawnCount,objectToSpawn.maxSpawnCount);
 			while (objectCountToSpawn > 0){
                 bool created = false;
@@ -833,7 +849,7 @@ public class Dungeonizer : MonoBehaviour {
 									createHere = true;
 								}
 							}
-                            else if (objectToSpawn.spawmInTheMiddle)
+                            else if (objectToSpawn.spawnInTheMiddle)
                             {
                                 if (spawnedObjectLocations[i].inTheMiddle)
                                 {
@@ -860,7 +876,7 @@ public class Dungeonizer : MonoBehaviour {
 
 
 					if (createHere){ //means dungeonizer found a suitable place to put object.
-						SpawnList spawnLocation = spawnedObjectLocations[i];
+						OriginalSpawnList spawnLocation = spawnedObjectLocations[i];
 						GameObject newObject;
                         Quaternion spawnRotation = Quaternion.identity;
 
@@ -927,4 +943,4 @@ public class Dungeonizer : MonoBehaviour {
 
         }
 	}
-}
+} 
