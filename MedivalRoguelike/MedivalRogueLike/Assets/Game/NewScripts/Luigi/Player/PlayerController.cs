@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //Assign teleport to vr input
-        if (SteamVR_Input.GetAction<SteamVR_Action_Boolean>("cast").GetStateDown(SteamVR_Input_Sources.RightHand))
+        if (SteamVR_Input.GetAction<SteamVR_Action_Boolean>("Interact With UI").GetStateDown(SteamVR_Input_Sources.RightHand))
         {
             print("Righthand Grabbing");
         }
@@ -71,8 +71,17 @@ public class PlayerController : MonoBehaviour
         //Assign Movement to vr input
         _moveAxis = SteamVR_Input.GetAction<SteamVR_Action_Vector2>("move").GetAxis(SteamVR_Input_Sources.RightHand);
         _run = SteamVR_Input.GetAction<SteamVR_Action_Boolean>("run").GetState(SteamVR_Input_Sources.RightHand);
+
         if (_rig != null)
         {
+            if (_moveAxis != Vector2.zero)
+            {
+                Debug.Log("Movement");
+            }
+            else
+            {
+                Debug.Log("no Movement");
+            }
             _rig.position += (_camRig.transform.right * _moveAxis.x + _camRig.transform.forward * _moveAxis.y) * Time.deltaTime;
             _rig.position = new Vector3(_rig.position.x, 0, _rig.position.z);
         }
