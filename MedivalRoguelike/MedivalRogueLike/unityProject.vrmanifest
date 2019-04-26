@@ -1,0 +1,16 @@
+{
+  "source": "Unity",
+  "applications": [
+    {
+      "app_key": "application.generated.unity.medivalroguelike.exe",
+      "launch_type": "url",
+      "url": "steam://launch/",
+      "action_manifest_path": "D:\\school\\2GD1\\periode 7\\Gameplay\\VR\\Dungeon_Crawler\\MedivalRoguelike\\MedivalRogueLike\\actions.json",
+      "strings": {
+        "en_us": {
+          "name": "MedivalRogueLike [Testing]"
+        }
+      }
+    }
+  ]
+}
