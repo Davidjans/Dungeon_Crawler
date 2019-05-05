@@ -230,9 +230,12 @@ public class DungeonGenerator : MonoBehaviour
 
 			// This makes the lastRoom variable the room that was not a deadend.
 			int lri = 1;
+
 			while (m_LastRoom.m_DeadEnd)
 			{
-				m_LastRoom = m_Rooms[m_Rooms.Count - lri++];
+                Debug.Log(m_Rooms[m_Rooms.Count - lri]);
+                m_LastRoom = m_Rooms[m_Rooms.Count - lri];
+                lri++;
 			}
 
 			if(m_Direction == "set")
