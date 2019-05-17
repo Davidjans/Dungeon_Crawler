@@ -37,22 +37,22 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //Assign teleport to vr input
-        if (SteamVR_Input.GetAction<SteamVR_Action_Boolean>("Interact With UI").GetStateDown(SteamVR_Input_Sources.RightHand))
+        if (SteamVR_Input.GetAction<SteamVR_Action_Boolean>("GrabPinch").GetStateDown(SteamVR_Input_Sources.RightHand))
         {
-            print("Righthand Grabbing");
+            //print("Righthand Grabbing");
         }
-        if (SteamVR_Input.GetAction<SteamVR_Action_Boolean>("GrabGrip").GetStateUp(SteamVR_Input_Sources.RightHand))
+        if (SteamVR_Input.GetAction<SteamVR_Action_Boolean>("Teleport").GetStateUp(SteamVR_Input_Sources.RightHand))
         {
-            print("Righthand Releasing");
+            //print("Righthand Releasing");
             _teleport = true;
         }
         if (SteamVR_Input.GetAction<SteamVR_Action_Boolean>("GrabPinch").GetStateDown(SteamVR_Input_Sources.LeftHand))
         {
-            print("Lefthand Grabbing");
+            //print("Lefthand Grabbing");
         }
         if (SteamVR_Input.GetAction<SteamVR_Action_Boolean>("GrabPinch").GetStateUp(SteamVR_Input_Sources.LeftHand))
         {
-            print("Leftthand Releasing");
+            //print("Leftthand Releasing");
         }
 
         //Pointer
@@ -74,14 +74,6 @@ public class PlayerController : MonoBehaviour
 
         if (_rig != null)
         {
-            if (_moveAxis != Vector2.zero)
-            {
-                Debug.Log("Movement");
-            }
-            else
-            {
-                Debug.Log("no Movement");
-            }
             _rig.position += (_camRig.transform.right * _moveAxis.x + _camRig.transform.forward * _moveAxis.y) * Time.deltaTime;
             _rig.position = new Vector3(_rig.position.x, 0, _rig.position.z);
         }
